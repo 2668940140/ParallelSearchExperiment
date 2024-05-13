@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-static constexpr int MAX_THREADS = 64;
+static constexpr int MAX_THREADS = 32;
 
 /* The number of nodes of one a graph*/
 static constexpr int NODES_N = 1e6;
@@ -21,4 +21,7 @@ static constexpr bool PARALLEL_GENERATE = false;
 
 /* This is not exact beacuse of struct alignment*/
 static constexpr int EXTRA_NODE_SIZE = 2048;
+
+/* If true, program will write EXTRA_NODE_SIZE bytes when visiting a node*/
+static constexpr int WRITE_TO_EXTRA = true;
 #endif

@@ -20,6 +20,13 @@ std::vector<Node *> bfs(Node *src, Node *des)
     Node *cur = q.front();
     q.pop();
 
+    if constexpr(WRITE_TO_EXTRA)
+    {
+      omp_set_lock(&cur->lock);
+      memset(cur->extra_data, char(thread_id), sizeof(cur->extra_data));
+      omp_unset_lock(&cur->lock);
+    }
+
     if (cur == src)
     { 
       while (cur != des)
