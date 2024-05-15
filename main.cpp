@@ -8,6 +8,7 @@ int main(int, char**){
   generate_tasks();
 
   parallel_search(paths);
+  assert(check_tasks(paths));
 
   return 0;
 }

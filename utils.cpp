@@ -163,3 +163,41 @@ void allocate_memory()
   tasks = new Node *[TASK_N][2];
   printf("Allocated.\n");
 }
+
+bool check_tasks(std::vector<Node *> const paths[])
+{
+  bool ok = true;
+  for (int i = 0; i < TASK_N; i++)
+  {
+    if (paths[i].size() == 0)
+    {
+      ok = false;
+      break;
+    }
+    if (paths[i].front() != tasks[i][0] ||
+        paths[i].back() != tasks[i][1])
+    {
+      ok = false;
+      break;
+    }
+    for(int j = 0; j < (int)paths[i].size() - 1; j++)
+    {
+      Node *node = paths[i][j], *node_next = paths[i][j + 1];
+      bool found = false;
+      for(auto child : node->children)
+      {
+        if (child == node_next)
+        {
+          found = true;
+          break;
+        }
+      }
+      if (!found)
+      {
+        ok = false;
+        break;
+      }
+    }
+  }
+  return ok;
+}
