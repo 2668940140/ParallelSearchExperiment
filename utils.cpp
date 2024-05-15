@@ -167,18 +167,19 @@ void allocate_memory()
 bool check_tasks(std::vector<Node *> const paths[])
 {
   bool ok = true;
+  #pragma omp parallel for num_threads(MAX_THREADS)
   for (int i = 0; i < TASK_N; i++)
   {
     if (paths[i].size() == 0)
     {
+      #pragma omp atomic write
       ok = false;
-      break;
     }
     if (paths[i].front() != tasks[i][0] ||
         paths[i].back() != tasks[i][1])
     {
+      #pragma omp atomic write
       ok = false;
-      break;
     }
     for(int j = 0; j < (int)paths[i].size() - 1; j++)
     {
@@ -194,10 +195,15 @@ bool check_tasks(std::vector<Node *> const paths[])
       }
       if (!found)
       {
+        #pragma omp atomic write
         ok = false;
-        break;
       }
     }
   }
+
+  if (ok)
+    printf("Accepted!\n");
+  else
+    printf("Wrong Answer\n");
   return ok;
 }
