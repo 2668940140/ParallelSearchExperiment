@@ -83,6 +83,7 @@ void generate_graph()
     }
   }
   printf("\n");
+  printf("Graph generated with %d nodes.\n", NODES_N);
 }
 
 void generate_tasks()
@@ -147,6 +148,7 @@ void generate_tasks()
     }
   }
   printf("\n");
+  printf("%d tasks generated.\n", TASK_N);
 }
 
 long getMemoryUsage() {

@@ -11,6 +11,10 @@
 #include <cassert>
 #include <vector>
 
+extern int nodes_pushed;
+extern int nodes_poped;
+
+
 /// @brief This function performs a parallel breadth-first search on a graph.
 /// @returns A vector of nodes that represent the path from the source to the destination.
 /// A empty vector if no path found.

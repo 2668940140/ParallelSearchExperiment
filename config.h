@@ -24,4 +24,10 @@ static constexpr int EXTRA_NODE_SIZE = 2048;
 
 /* If true, program will write EXTRA_NODE_SIZE bytes when visiting a node*/
 static constexpr int WRITE_TO_EXTRA = true;
+
+/** If true, program will record the number of pushed and poped nodes
+ * This is useful for debugging and performance analysis, but it is slow.
+*/
+static constexpr bool RECODE_NODES_PUSHED_POPED = false;
+
 #endif

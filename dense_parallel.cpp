@@ -4,7 +4,11 @@
 #include <cstdio>
 #include <chrono>
 
+int nodes_pushed = 0;
+int nodes_poped = 0;
+
 static int thread_searched[MAX_THREADS];
+
 
 std::vector<Node *> bfs(Node *src, Node *des)
 {
@@ -19,6 +23,12 @@ std::vector<Node *> bfs(Node *src, Node *des)
   {
     Node *cur = q.front();
     q.pop();
+
+    if constexpr (RECODE_NODES_PUSHED_POPED)
+    {
+      #pragma omp atomic
+      nodes_poped++;
+    }
 
     if constexpr(WRITE_TO_EXTRA)
     {
@@ -45,6 +55,12 @@ std::vector<Node *> bfs(Node *src, Node *des)
       child->vis[thread_id] = thread_searched_local;
       child->prev[thread_id] = cur;
       q.push(child);
+      
+      if constexpr (RECODE_NODES_PUSHED_POPED)
+      {
+        #pragma omp atomic
+        nodes_pushed++;
+      }
     }
   }
   return path;
@@ -53,7 +69,7 @@ std::vector<Node *> bfs(Node *src, Node *des)
 void parallel_search(std::vector<Node *> paths[TASK_N])
 {
 
-  printf("Searching Paths...\n");
+  printf("Searching Paths with %d threads...\n", MAX_THREADS);
   printf("[>>>>>>>>>>>>>>>>>>>>>>>>>>>>]\n");
   auto begin_time = std::chrono::high_resolution_clock::now();
 
@@ -80,4 +96,11 @@ void parallel_search(std::vector<Node *> paths[TASK_N])
   printf("\nElasped : %.3lf s\n", 
   std::chrono::duration_cast<std::chrono::microseconds>(end_time - begin_time)
   .count() / 1000000.0);
+  if constexpr (RECODE_NODES_PUSHED_POPED)
+  {
+    printf("nodes_pushed: %d\n", nodes_pushed);
+    printf("nodes_poped: %d\n", nodes_poped);
+    printf("%lf nodes_pushed per task\n", nodes_pushed / double(TASK_N));
+    printf("%lf nodes_poped per task\n", nodes_poped / double(TASK_N));
+  }
 }
